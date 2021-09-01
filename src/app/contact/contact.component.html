@@ -1,0 +1,79 @@
+<div class="mainDiv">
+    <h2 align="center" style="padding: 5px;">Phone Book App</h2>
+    <div class="buttonDiv">
+        <h4>Contacts</h4>
+        <button class="btn btn-primary addContactButton" (click)="open(content)">+ Add Contact</button>
+    </div>
+    <diV class="searchDiv">
+        <input type="text" class="form-control"  placeholder="Enter Keyword for filter result" [(ngModel)]="searchedKeyword">
+    </diV>
+    <div>
+        <div class="contactList" *ngFor="let c of contactArray | filter:searchedKeyword">
+            <table style="width: 100%;">
+                <ng-container>
+                    <tr style="width: 50%;">
+                        <td style="font-size: 30px; padding-bottom: 15px;">{{c.firstName}} {{c.lastName}}</td>
+                        <td><button class="btn btn-danger" style="float: right;" (click)="deleteContact(c.contactNumber)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 15px;"><i class="fa fa-phone"></i>  {{c.contactNumber}}</td>
+                    </tr>
+                </ng-container>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">New Friend</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form #f="ngForm" (ngSubmit)="f.valid && onSubmit(f)">
+            <div class="form-group">
+                <div *ngIf="f.submitted && fn.invalid" style="color:red;">
+                    <div *ngIf="fn.errors?.required">First Name is required</div>
+                    <div *ngIf="fn.errors?.minlength">Lenght should be > 3</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="firstname" name="firstname" placeholder="First Name" minlength="4" class="form-control" 
+                    [ngClass]="{ 'is-invalid': f.submitted &&  fn.untouched }" #fn="ngModel" ngModel required>
+                </div>
+            </div><br>
+            
+            <div class="form-group">
+                <div *ngIf="f.submitted && ln.invalid" style="color:red;">
+                    <div *ngIf="ln.errors?.required">Last Name is required</div>
+                    <div *ngIf="ln.errors?.minlength">Lenght should be > 3</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="lastname" name="lastname" minlength="4" placeholder="Last Name" class="form-control" 
+                    [ngClass]="{ 'is-invalid': f.submitted &&  ln.untouched }" #ln="ngModel" ngModel required>
+                </div>
+            </div><br>
+
+            <div class="form-group">
+                <div *ngIf="f.submitted && cn.invalid" style="color:red;">
+                    <div *ngIf="cn.errors?.required">Contact is required</div>
+                    <div *ngIf="cn.errors?.minlength">Lenght should be 10</div>
+                    <div *ngIf="cn.errors?.maxlength">Lenght should be 10</div>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="phoneNumber" name="phoneNumber" minlength="10" maxlength="10" placeholder="Contact" class="form-control"
+                    [ngClass]="{ 'is-invalid': f.submitted &&  cn.untouched }" #cn="ngModel" ngModel required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="modal.close('Cancel click')">Cancel</button>
+                <button data-dismiss="modal" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+    
+
+</ng-template>
